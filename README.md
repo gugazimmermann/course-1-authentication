@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+# Course 1 - Authentication with React/TypeScript and Jest
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the code for the "**Authentication**" project, from the ebook "**Authentication with React/TypeScript and Jest**", which I wrote.
 
-## Available Scripts
+Course Landing Page: [https://www.zero-ao-profissional.com.br/](https://www.zero-ao-profissional.com.br/)
 
-In the project directory, you can run:
+See the application running: [https://course-1-authentication.vercel.app](https://course-1-authentication.vercel.app)
 
-### `yarn start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **API**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  - Learn how get informations from a API.
 
-### `yarn test`
+- **User Registration:**
+  - Complete user registration flow, including confirmation codes and password recovery.
+  - Protected pages for authenticated users.
+  - Users can update their data.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Development Best Practices
 
-### `yarn build`
+- **Agile Methodology:**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  - How to work in an Agile development environment, with Scrum, Jira, etc.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Componentization:**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  - Creation of reusable components like alerts, inputs, forms...
 
-### `yarn eject`
+- **Hooks and State Management:**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  - Teaches the use of React hooks and effective state management using React Context.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Simulated Backend:**
+  - Demonstrates the creation of a fake backend for simulating API calls.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Code Quality and Testing
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **Code Style:**
 
-## Learn More
+  - Utilizes Lint and Prettier for consistent and clean code.
+  - Husky to enforce code quality in commits and pushs.
+  - Conventional Commits for solid code history.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Testing:**
+  - Different types of testing, use of auxiliary files for optimization.
+  - Achieves 100% code coverage with Jest.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Getting Started
+
+1. Clone the repository.
+2. Install dependencies using `yarn install`.
+3. Run with `yarn start`.
+
+**To see the codes, need to look at the developer console (Crtl+Shift+J).**
+
+<!-- ![Unit Tests](readme/unit-test-1.png) -->
+
