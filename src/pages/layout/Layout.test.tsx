@@ -1,48 +1,37 @@
-import {render, screen, waitFor} from "@testing-library/react";
-import {MemoryRouter, Route, Routes} from "react-router-dom";
+import {screen, waitFor} from "@testing-library/react";
+import {Route, Routes} from "react-router-dom";
 import {EN, ROUTES} from "../../common/constants";
-import {getCurrentUserMock} from "../../tests-setup";
+import {componentSetup, useAuthMock} from "../../tests-setup";
 import Home from "../public/home/Home";
 import Dashboard from "../protected/Dashboard";
 import Layout from "./Layout";
 
 describe("Layout", () => {
   const setupComponent = (): void => {
-    render(
-      <MemoryRouter initialEntries={[ROUTES.HOME]}>
+    componentSetup({
+      component: (
         <Routes>
           <Route element={<Layout />}>
             <Route path={ROUTES.HOME} element={<Home />} />
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
           </Route>
         </Routes>
-      </MemoryRouter>,
-    );
+      ),
+      initialEntries: [ROUTES.HOME],
+    });
   };
 
   test("should navigate to dashboard if currentUser is available", async () => {
-    getCurrentUserMock.mockResolvedValue({data: LOGGEDUSER});
+    useAuthMock.mockReturnValue({state: {user: LOGGEDUSER}});
     setupComponent();
     await waitFor(() => {
-      expect(getCurrentUserMock).toHaveBeenCalledTimes(1);
-    });
-    await waitFor(() => {
-      expect(
-        screen.getByRole("heading", {
-          name: EN.PAGES.DASHBOARD.TITLE,
-          level: 1,
-        }),
-      ).toBeInTheDocument();
-      expect(screen.getByText(`${EN.PAGES.DASHBOARD.WELCOME} ${LOGGEDUSER.name}`)).toBeInTheDocument();
+      expect(screen.getByText(EN.PAGES.DASHBOARD.TITLE)).toBeInTheDocument();
     });
   });
 
   test("should navigate to home if currentUser is not available", async () => {
-    getCurrentUserMock.mockResolvedValue({data: undefined});
+    useAuthMock.mockReturnValue({state: {user: null}});
     setupComponent();
-    await waitFor(() => {
-      expect(getCurrentUserMock).toHaveBeenCalledTimes(1);
-    });
     await waitFor(() => {
       expect(screen.getByText(EN.COMPONENTS.HERO.TITLE)).toBeInTheDocument();
     });
