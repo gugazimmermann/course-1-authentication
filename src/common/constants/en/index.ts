@@ -21,6 +21,7 @@ const LOGINBUTTON = {
 
 const BLOG = {
   TITLE: "All Posts",
+  BUTTON: "Back",
 };
 
 const LOGIN = {
