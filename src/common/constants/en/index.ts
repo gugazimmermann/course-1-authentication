@@ -28,6 +28,11 @@ const LOGIN = {
   TITLE: "Login",
 };
 
+const DASHBOARD = {
+  TITLE: "Dashboard",
+  WELCOME: "Welcome,",
+};
+
 const EN = Object.freeze({
   LAYOUT: {
     MENU,
@@ -40,6 +45,7 @@ const EN = Object.freeze({
   PAGES: {
     BLOG,
     LOGIN,
+    DASHBOARD,
   },
 });
 
