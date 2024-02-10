@@ -1,83 +1,97 @@
-import {useState} from "react";
-import {useParams, useNavigate} from "react-router-dom";
-import {type LoginValues} from "../../../common/interfaces/auth";
-import {type AlertProps} from "../../../common/interfaces/components";
+import {render, screen, fireEvent, waitFor} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import {MemoryRouter} from "react-router-dom";
 import {EN, ROUTES} from "../../../common/constants";
-import {Auth} from "../../../services";
-import {isUser} from "../../../common/helpers";
-import {EmailIcon, PasswordIcon} from "../../../icons";
-import {AuthLink} from "../../../components";
-import {validateEmail} from "../../utils/validation";
-import AuthLayout from "./AuthLayout";
-import AuthForm from "./AuthForm";
+import * as services from "../../../services/auth";
+import Login from "./Login";
 
-const Login = (): JSX.Element => {
-  const navigate = useNavigate();
-  const {email} = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [alert, setAlert] = useState<AlertProps>();
-  const [values, setValues] = useState<LoginValues>({
-    email: email ?? "",
-    password: "",
-  });
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    setLoading(true);
-    setAlert(undefined);
-    if (!validateEmail(values.email, setAlert)) {
-      setLoading(false);
-      return;
-    }
-    const response = await Auth.login(values);
-    if (!isUser(response?.data)) {
-      setAlert({
-        type: "error",
-        text: response.data === "Unverified" ? EN.AUTH.USERUNVERIFIED : EN.AUTH.USERUNAUTHORIZED,
-      });
-    } else {
-      localStorage.setItem("token", String(response.data.token));
-      navigate(ROUTES.DASHBOARD);
-    }
-    setLoading(false);
+jest.mock("../../../services/auth", () => ({
+  ...jest.requireActual("../../../services/auth"),
+  login: jest.fn(),
+}));
+
+describe("Login", () => {
+  const setupComponent = (): void => {
+    render(
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>,
+    );
   };
 
-  return (
-    <AuthLayout title={EN.PAGES.LOGIN.TITLE}>
-      <AuthForm<LoginValues>
-        loading={loading}
-        alert={alert}
-        submitText={EN.PAGES.LOGIN.BUTTON}
-        onSubmit={async e => {
-          await handleSubmit(e);
-        }}
-        values={values}
-        setValues={setValues}
-        inputs={[
-          {
-            required: true,
-            autocomplete: "email",
-            type: "email",
-            placeholder: EN.AUTH.EMAIL,
-            icon: <EmailIcon />,
-            value: "email",
-          },
-          {
-            required: true,
-            type: "password",
-            placeholder: EN.AUTH.PASSWORD,
-            icon: <PasswordIcon />,
-            value: "password",
-          },
-        ]}>
-        <>
-          <AuthLink route={ROUTES.FORGOT_PASSWORD} text={EN.AUTH.LINKFORGOTPASSWORD} />
-          <AuthLink route={ROUTES.REGISTER} text={EN.AUTH.LINKREGISTER} />
-          <AuthLink route={ROUTES.VERIFY_EMAIL} text={EN.AUTH.LINKVERIFYEMAIL} />
-        </>
-      </AuthForm>
-    </AuthLayout>
-  );
-};
+  test("renders Login component with form", () => {
+    setupComponent();
+    expect(screen.getByPlaceholderText(EN.AUTH.EMAIL)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(EN.AUTH.PASSWORD)).toBeInTheDocument();
+    expect(screen.getByTestId("auth-submit-button")).toBeInTheDocument();
+  });
 
-export default Login;
+  test("handles form submission and redirects on successful login", async () => {
+    require("../../../services/auth").login.mockResolvedValue({
+      data: {
+        id: "8cd5be57-1b33-4662-b4c1-286b73f9f4ad",
+        name: "User Test",
+        email: "test@example.com",
+        verified: true,
+        token: "mocked-token",
+      },
+    });
+    const spy = jest.spyOn(Storage.prototype, "setItem");
+    const mockNavigate = jest.fn();
+    require("react-router-dom").useNavigate.mockReturnValue(mockNavigate);
+    setupComponent();
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.EMAIL), "test@example.com");
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.PASSWORD), "password");
+    fireEvent.click(screen.getByTestId("auth-submit-button"));
+    await waitFor(() => {
+      expect(services.login).toHaveBeenCalledWith({
+        email: "test@example.com",
+        password: "password",
+      });
+      expect(spy).toHaveBeenCalledWith("token", "mocked-token");
+      expect(mockNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
+    });
+  });
+
+  test("displays error message on login failure", async () => {
+    require("../../../services/auth").login.mockResolvedValue({
+      data: "Unauthorized",
+    });
+    setupComponent();
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.EMAIL), "test@example.com");
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.PASSWORD), "wrongpassword");
+    fireEvent.click(screen.getByTestId("auth-submit-button"));
+    await waitFor(() => {
+      expect(screen.getByText(EN.AUTH.USERUNAUTHORIZED)).toBeInTheDocument();
+    });
+  });
+
+  test("displays error message when user is unverified", async () => {
+    require("../../../services/auth").login.mockResolvedValue({
+      data: "Unverified",
+    });
+    setupComponent();
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.EMAIL), "test@example.com");
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.PASSWORD), "password");
+    fireEvent.click(screen.getByTestId("auth-submit-button"));
+    await waitFor(() => {
+      expect(screen.getByText(EN.AUTH.EMAILUNVERIFIED)).toBeInTheDocument();
+    });
+  });
+
+  test("displays error message when email is invalid", async () => {
+    setupComponent();
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.EMAIL), "test@example");
+    userEvent.type(screen.getByPlaceholderText(EN.AUTH.EMAIL), "password");
+    fireEvent.click(screen.getByTestId("auth-submit-button"));
+    await waitFor(() => {
+      expect(services.login).not.toHaveBeenCalled();
+      expect(screen.getByText(EN.AUTH.EMAILERROR)).toBeInTheDocument();
+    });
+  });
+});
