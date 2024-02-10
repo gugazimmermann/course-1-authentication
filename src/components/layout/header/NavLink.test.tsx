@@ -1,24 +1,27 @@
-import {render, screen, fireEvent} from "@testing-library/react";
-import {MemoryRouter, Route, Routes} from "react-router-dom";
+import {screen, fireEvent} from "@testing-library/react";
+import {Route, Routes} from "react-router-dom";
 import {type NavLinkProps} from "../../../common/interfaces/components";
 import {EN, ROUTES} from "../../../common/constants";
+import {componentSetup, useAuthMock} from "../../../tests-setup";
 import Login from "../../../pages/public/auth/Login";
 import {LoginIcon} from "../../../icons";
 import NavLink from "./NavLink";
 
-describe("NavLink", () => {
+describe("AuthLink", () => {
   const setupComponent = (props: NavLinkProps): void => {
-    render(
-      <MemoryRouter initialEntries={[ROUTES.HOME]}>
+    componentSetup({
+      component: (
         <Routes>
           <Route path={ROUTES.HOME} element={<NavLink {...props} />} />
           <Route path={ROUTES.LOGIN} element={<Login />} />
         </Routes>
-      </MemoryRouter>,
-    );
+      ),
+      initialEntries: [ROUTES.HOME],
+    });
   };
 
-  test("NavLink should have text and route", () => {
+  test("AuthLink should have text and route", () => {
+    useAuthMock.mockReturnValue({state: {user: null}});
     setupComponent({route: ROUTES.LOGIN, content: "Navigation Link"});
     const link = screen.getByRole("link", {name: "Navigation Link"});
     expect(link).toHaveAttribute("href", ROUTES.LOGIN);
@@ -26,7 +29,8 @@ describe("NavLink", () => {
     expect(screen.getByText(EN.PAGES.LOGIN.TITLE)).toBeInTheDocument();
   });
 
-  test("NavLink should have icon and route", () => {
+  test("AuthLink should have icon and route", () => {
+    useAuthMock.mockReturnValue({state: {user: null}});
     setupComponent({route: ROUTES.LOGIN, content: <LoginIcon />});
     const link = screen.getByTestId("login-icon").closest("a");
     expect(link).toBeInTheDocument();

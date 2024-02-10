@@ -49,6 +49,14 @@ const AUTH = {
   LINKALREDYREGISTERED: "Already have an account? Log in now!",
   LINKVERIFYEMAIL: "Click here to verify your email!",
   LINKBACKTOLOGIN: "Back to Login.",
+  PASSWORDCHANGEERROR: "An error occurred while changing the password, please try again.",
+  PASSWORDCHANGESUCCESS: "Password changed successfully.",
+  CURRENTPASSWORD: "Current Password",
+  NEWPASSWORD: "New Password",
+  REPEATNEWPASSWORD: "Repeat New Password",
+  CHANGEUSERDATAERROR: "An error occurred while updating the profile, please try again.",
+  CHANGEUSERDATASUCCESS: "Profile updated successfully.",
+  CHANGEUSERDATAEMAIL: "Email has been changed, confirmation must be done before the next login.",
 };
 
 const LOGIN = {
@@ -82,6 +90,18 @@ const DASHBOARD = {
   WELCOME: "Welcome,",
 };
 
+const ACCOUNT = {
+  TITLE: "My Account",
+  CHANGEPASSWORD: {
+    TITLE: "Change Password",
+    BUTTON: "Change",
+  },
+  USERDATA: {
+    TITLE: "My Profile",
+    BUTTON: "Update",
+  },
+};
+
 const EN = Object.freeze({
   LAYOUT: {
     MENU,
@@ -99,6 +119,7 @@ const EN = Object.freeze({
     FORGOTPASSWORD,
     NEWPASSWORD,
     DASHBOARD,
+    ACCOUNT,
   },
   AUTH,
 });
