@@ -20,8 +20,11 @@ const LOGINBUTTON = {
 };
 
 const BLOG = {
-  TITLE: "All Posts",
+  TITLE: "Now Playing",
+  RELEASE: "Upcoming",
   BUTTON: "Back",
+  NORESULT: "No results found.",
+  ERROR: "An error occurred, please try again.",
 };
 
 const LOGIN = {
