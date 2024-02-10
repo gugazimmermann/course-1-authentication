@@ -27,8 +27,54 @@ const BLOG = {
   ERROR: "An error occurred, please try again.",
 };
 
+const AUTH = {
+  USERUNVERIFIED: "Email not verified.",
+  USERUNAUTHORIZED: "Unauthorized, please try again.",
+  EMAIL: "Email",
+  EMAILERROR: "Invalid email.",
+  EMAILNOTFOUND: "Email not found.",
+  EMAILUNVERIFIED: "Email not verified.",
+  PASSWORD: "Password",
+  PASSWORDERROR: "Invalid password, passwords are either different or do not meet the minimum of 6 characters.",
+  REPEATPASSWORD: "Repeat Password",
+  CODE: "Code",
+  CODEERROR: "Invalid code.",
+  CODESENDED: "Code sent to",
+  SENDCODEERROR: "Error sending the code, please try again.",
+  NAME: "Name",
+  NAMEERROR: "Invalid name, minimum of 3 characters required.",
+  REGISTERERROR: "An error occurred while registering, please try again.",
+  LINKFORGOTPASSWORD: "Forgot your password? Click here!",
+  LINKREGISTER: "Don't have an account? Sign up now!",
+  LINKALREDYREGISTERED: "Already have an account? Log in now!",
+  LINKVERIFYEMAIL: "Click here to verify your email!",
+  LINKBACKTOLOGIN: "Back to Login.",
+};
+
 const LOGIN = {
   TITLE: "Login",
+  BUTTON: "Sign In",
+};
+
+const REGISTER = {
+  TITLE: "New Registration",
+  BUTTON: "Register",
+};
+
+const VERIFYEMAIL = {
+  TITLE: "Verify Email",
+  BUTTON: "Send Code",
+  BUTTONRESEND: "Resend Code",
+};
+
+const FORGOTPASSWORD = {
+  TITLE: "Forgot Password",
+  BUTTON: "Receive Code",
+};
+
+const NEWPASSWORD = {
+  TITLE: "New Password",
+  BUTTON: "Send",
 };
 
 const DASHBOARD = {
@@ -48,8 +94,13 @@ const EN = Object.freeze({
   PAGES: {
     BLOG,
     LOGIN,
+    REGISTER,
+    VERIFYEMAIL,
+    FORGOTPASSWORD,
+    NEWPASSWORD,
     DASHBOARD,
   },
+  AUTH,
 });
 
 export default EN;
