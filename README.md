@@ -4,7 +4,10 @@ This repository contains the code for the "**Authentication**" project, from the
 
 Course Landing Page: [https://www.zero-ao-profissional.com.br/](https://www.zero-ao-profissional.com.br/)
 
-See the application running: [https://course-1-authentication.vercel.app](https://course-1-authentication.vercel.app)
+See the application running: 
+* [https://course-1-authentication.zero-to-professional.com](https://course-1-authentication.zero-to-professional.com/)
+
+* [https://course-1-authentication.vercel.app](https://course-1-authentication.vercel.app/)
 
 ## Features
 
